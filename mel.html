@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Jugadores</title>
+  <script>
+    function listarJugadores() {
+      var jugadores = [
+        { Nombre: "Fábio1", POS: "G", Edad: 43, Est: "1.88 m", P: 86, NAC: "Brasil" },
+        { Nombre: "Marlon4", POS: "D", Edad: 28, Est: "1.83 m", P: 78, NAC: "Brasil" },
+        { Nombre: "Marcelo12", POS: "D", Edad: 35, Est: "1.73 m", P: 72, NAC: "Brasil" },
+        { Nombre: "Nino33", POS: "D", Edad: 26, Est: "1.88 m", P: 82, NAC: "Brasil" },
+        { Nombre: "John Kennedy9", POS: "A", Edad: 21, Est: "1.73 m", P: 71, NAC: "Brasil" },
+        { Nombre: "Keno11", POS: "A", Edad: 34, Est: "1.78 m", P: 72, NAC: "Brasil" },
+        { Nombre: "Germán Cano14", POS: "A", Edad: 35, Est: "1.78 m", P: 81, NAC: "Argentina" }
+      ];
+
+      var opcion = document.getElementById("opcion").value;
+      var resultado = document.getElementById("resultado");
+
+      if (opcion === "a") {
+        var jugadoresArgentinos = jugadores.filter(function(jugador) {
+          return jugador.NAC === "Argentina";
+        });
+        mostrarResultados(jugadoresArgentinos);
+      } else if (opcion === "b") {
+        var jugadoresPeso = jugadores.filter(function(jugador) {
+          return jugador.P >= 75 && jugador.P <= 80;
+        });
+        mostrarResultados(jugadoresPeso);
+      } else if (opcion === "c") {
+        var jugadorMasAlto = jugadores.reduce(function(anterior, actual) {
+          var alturaActual = parseFloat(actual.Est);
+          var alturaAnterior = parseFloat(anterior[0].Est);
+          if (alturaActual > alturaAnterior) {
+            return [actual];
+          } else if (alturaActual === alturaAnterior) {
+            anterior.push(actual);
+          }
+          return anterior;
+        }, [jugadores[0]]);
+        mostrarResultados(jugadorMasAlto);
+      } else if (opcion === "d") {
+        mostrarResultados(jugadores);
+      }
+    }
+
+    function mostrarResultados(jugadores) {
+      var resultado = document.getElementById("resultado");
+      resultado.innerHTML = "";
+
+      if (jugadores.length === 0) {
+        resultado.innerHTML = "No se encontraron jugadores.";
+      } else {
+        var ul = document.createElement("ul");
+        jugadores.forEach(function(jugador) {
+          var li = document.createElement("li");
+          li.textContent = "Nombre: " + jugador.Nombre + ", POS: " + jugador.POS + ", Edad: " + jugador.Edad + ", Est: " + jugador.Est + ", P: " + jugador.P + ", NAC: " + jugador.NAC;
+          ul.appendChild(li);
+        });
+        resultado.appendChild(ul);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Consulta de Jugadores</h1>
+  <label for="opcion">Seleccione una opción:</label>
+  <select id="opcion">
+    <option value="a">Listar jugadores argentinos</option>
+    <option value="b">Listar jugadores con peso entre 75 y 80 kg</option>
+    <option value="c">Mostrar los jugadores más altos</option>
+    <option value="d">Mostrar todos los jugadores</option>
+  </select>
+  <button onclick="listarJugadores()">Consultar</button>
+  <div id="resultado"></div>
+</body>
+</html>
